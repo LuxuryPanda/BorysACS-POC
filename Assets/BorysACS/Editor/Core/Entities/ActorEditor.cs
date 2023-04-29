@@ -13,19 +13,19 @@ namespace BorysACS.Editor.Core.Entities
         
         private ReorderableList _componentsList;
         private SerializedProperty _componentsProperty;
+        
+        #endregion
+        
+        #region ## Properties ##
+        
         private new Actor target => base.target as Actor;
-
-        private static GUIStyle _miniToggle;
-
+        
         #endregion
 
         #region ## Unity Methods ##
 
         private void OnEnable()
         {
-            var minusIcon = EditorGUIUtility.IconContent("Toolbar Minus");
-            var plusIcon = EditorGUIUtility.IconContent("Toolbar Plus");
-            
             _componentsProperty = serializedObject.FindProperty("components");
             _componentsList = new ReorderableList(serializedObject, _componentsProperty)
             {
@@ -40,7 +40,6 @@ namespace BorysACS.Editor.Core.Entities
             {
                 if (index >= _componentsProperty.arraySize)
                 {
-                    Debug.LogWarning("Index out of range");
                     return;
                 }
 
@@ -81,12 +80,7 @@ namespace BorysACS.Editor.Core.Entities
             base.OnInspectorGUI();
             GUILayout.Space(10);
             serializedObject.Update();
-            
-            if (_miniToggle == null)
-            {
-                _miniToggle = "ShurikenToggle";
-            }
-            
+
             // Drawing the list in playmode-only, since it is for debug purposes only
             if (Application.isPlaying)
             {
