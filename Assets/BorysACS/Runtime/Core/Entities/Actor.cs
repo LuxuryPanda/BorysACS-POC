@@ -7,15 +7,23 @@
  *
  ***/
 
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BorysACS.Core.Entities
 {
+    /// <summary>
+    /// Base component for all actors in the game.
+    /// </summary>
+    [AddComponentMenu("BorysACS/Entities/Actor"), DisallowMultipleComponent]
     public class Actor : MonoBehaviour
     {
         #region ## Fields ##
 
-
+        private Dictionary<string, Component> _componentsByName = new();
+        
+        [SerializeField, HideInInspector] private List<Component> components = new();
 
         #endregion
 
@@ -29,19 +37,27 @@ namespace BorysACS.Core.Entities
 
         private void Awake()
         {
-
-        }
-
-        private void Start()
-        {
-
+            InitializeActor();
         }
 
         #endregion
 
-        #region ## Core ##
+        #region ## Initialization ##
 
-        
+        private void InitializeActor()
+        {
+            _componentsByName.Clear();
+            components.Clear();
+            
+            var collectedComponents = GetComponents<Component>();
+            
+            
+            foreach (var component in collectedComponents)
+            {
+                _componentsByName.Add(component.GetType().Name, component);
+                components.Add(component);
+            }
+        }
 
         #endregion
     }
