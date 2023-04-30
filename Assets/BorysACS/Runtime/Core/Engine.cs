@@ -34,7 +34,9 @@ namespace BorysACS.Core
 
         #region ## Properties ##
 
+        public Context Context => _context;
         
+        public World World => _world;
 
         #endregion
 
@@ -90,7 +92,7 @@ namespace BorysACS.Core
 
         private void InitializeContext()
         {
-            _context = ScriptableDirector.Get<Context>();
+            _context = ScriptableDirector.GetInherited<Context>();
             if (_context != null)
             {
                 _context.Initialize();
@@ -100,7 +102,7 @@ namespace BorysACS.Core
         
         private void InitializeWorld()
         {
-            _world = ScriptableDirector.Get<World>();
+            _world = ScriptableDirector.GetInherited<World>();
             if (_world != null) _world.Initialize();
         }
 

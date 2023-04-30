@@ -73,12 +73,25 @@ namespace BorysACS.Tools
         public static T Get<T>() where T : ScriptableObject
         {
             if (Instance == null)
+            {
                 return null;
-
+            }
+            
+            // For ease of search, let's first try to find a ScriptableObject named as the given type
             if (Instance._scriptableObjectsByName.TryGetValue(typeof(T).Name, out var scriptableObject))
                 return scriptableObject as T;
 
             return Instance.Load<T>();
+        }
+        
+        public static T GetInherited<T>() where T : ScriptableObject
+        {
+            if (Instance == null)
+            {
+                return null;
+            }
+
+            return Instance.LoadInherited<T>();
         }
 
         #endregion
@@ -87,7 +100,24 @@ namespace BorysACS.Tools
 
         private T Load<T>() where T : ScriptableObject
         {
-            // TODO
+            var scriptableObject = _scriptableObjects.Find(x => x.GetType() == typeof(T));
+            if (scriptableObject != null)
+            {
+                return scriptableObject as T;
+            }
+
+            // Otherwise give up! :c
+            return null;
+        }
+        
+        private T LoadInherited<T>() where T : ScriptableObject
+        {
+            var scriptableObject = _scriptableObjects.Find(x => x.GetType().IsSubclassOf(typeof(T)));
+            if (scriptableObject != null)
+            { 
+                return scriptableObject as T;
+            }
+            
             return null;
         }
 
