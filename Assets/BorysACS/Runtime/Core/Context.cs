@@ -49,17 +49,38 @@ namespace BorysACS.Core
 
         public void AddSystem<T>(T system) where T : BaseSystem
         {
+            if (system == null)
+            {
+                Debug.LogError("You are trying to add a null system to the context.");
+                return;
+            }
+            
             _systems.Add(system);
+            system.Initialize(this);
         }
         
         public void AddSystemFixed<T>(T system) where T : BaseSystem
         {
+            if (system == null)
+            {
+                Debug.LogError("You are trying to add a null fixed system to the context.");
+                return;
+            }
+            
             _systemsFixed.Add(system);
+            system.Initialize(this);
         }
         
         public void AddSystemLate<T>(T system) where T : BaseSystem
         {
+            if (system == null)
+            {
+                Debug.LogError("You are trying to add a null late system to the context.");
+                return;
+            }
+            
             _systemsLate.Add(system);
+            system.Initialize(this);
         }
 
         #endregion
@@ -78,7 +99,7 @@ namespace BorysACS.Core
         {
             for (int i = 0; i < _systemsFixed.Count; i++)
             {
-                _systemsFixed[i].Execute();
+                _systemsFixed[i].ExecuteFixed();
             }
         }
         
@@ -86,10 +107,19 @@ namespace BorysACS.Core
         {
             for (int i = 0; i < _systemsLate.Count; i++)
             {
-                _systemsLate[i].Execute();
+                _systemsLate[i].ExecuteLate();
             }
         }
         
+        #endregion
+
+        #region ## Getters ##
+
+        public T GetSystem<T>() where T : BaseSystem
+        {
+            return _systems.Find(system => system.GetType() == typeof(T)) as T;
+        }
+
         #endregion
     }
 }

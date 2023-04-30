@@ -7,6 +7,7 @@
  *
  ***/
 
+using System;
 using System.Collections.Generic;
 using BorysACS.Core.Base;
 using BorysACS.Core.Entities;
@@ -23,7 +24,7 @@ namespace BorysACS.Core
     {
         #region ## Fields ##
 
-        private List<Actor> _actors;
+        [SerializeField] private List<Actor> _actors = new List<Actor>();
 
         #endregion
 
@@ -66,6 +67,29 @@ namespace BorysACS.Core
         #region ## Core ##
 
         
+
+        #endregion
+
+        #region ## For All ##
+
+        public void ForAllActors(Action<Actor> callback)
+        {
+            foreach (var actor in _actors)
+            {
+                callback?.Invoke(actor);
+            }
+        }
+        
+        public void ForAllActors<T>(Action<T> callback) where T : Actor
+        {
+            foreach (var actor in _actors)
+            {
+                if (actor is T requestedActor)
+                {
+                    callback?.Invoke(requestedActor);
+                }
+            }
+        }
 
         #endregion
     }

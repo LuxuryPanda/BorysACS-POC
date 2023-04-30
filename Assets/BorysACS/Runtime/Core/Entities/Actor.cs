@@ -98,7 +98,76 @@ namespace BorysACS.Core.Entities
             _componentsByName.Add(component.GetType().Name, component);
             components.Add(component);
         }
+        
+        public bool HasComponent<T>()
+        {
+            if (_componentsByName.ContainsKey(typeof(T).Name))
+            {
+                return true;
+            }
+
+            return components.Exists(x => x.GetType() == typeof(T));
+        }
 
         #endregion
+
+        #region ## Positions ##
+        
+        #region ### Getters ###
+        
+        public Vector3 GetPosition()
+        {
+            return Transform.position;
+        }
+        
+        public float GetPositionX()
+        {
+            return Transform.position.x;
+        }
+        
+        public float GetPositionY()
+        {
+            return Transform.position.y;
+        }
+        
+        public float GetPositionZ()
+        {
+            return Transform.position.z;
+        }
+        
+        #endregion
+        
+        #region ### Setters ###
+
+        public void SetPosition(Vector3 position)
+        {
+            Transform.position = position;
+        }
+        
+        public void SetPosition(float x, float y, float z)
+        {
+            Transform.position = new Vector3(x, y, z);
+        }
+        
+        public void SetPositionX(float x)
+        {
+            Transform.position = new Vector3(x, Transform.position.y, Transform.position.z);
+        }
+        
+        public void SetPositionY(float y)
+        {
+            Transform.position = new Vector3(Transform.position.x, y, Transform.position.z);
+        }
+        
+        public void SetPositionZ(float z)
+        {
+            Transform.position = new Vector3(Transform.position.x, Transform.position.y, z);
+        }
+
+        #endregion
+
+        #endregion
+
+        
     }
 }

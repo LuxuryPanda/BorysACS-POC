@@ -27,6 +27,11 @@ namespace BorysACS.Core.Base
         /// Priority of the system. The lower the priority, the earlier the system will be executed.
         /// </summary>
         private int _priority;
+        
+        /// <summary>
+        /// Context to which the system belongs.
+        /// </summary>
+        private Context _context;
 
         #endregion
 
@@ -49,7 +54,27 @@ namespace BorysACS.Core.Base
             get => _priority;
             set => _priority = value;
         }
+        
+        /// <summary>
+        /// Current context 
+        /// </summary>
+        public Context Context => _context;
+        
+        /// <summary>
+        /// Current world the Engine is working with.
+        /// </summary>
+        public World World => Engine.GetWorld();
 
+        #endregion
+        
+        #region ## Initialization ##
+        
+        public virtual void Initialize(Context context)
+        {
+            _context = context;
+            Debug.Log($"System {GetType().Name} initialized.");
+        }
+        
         #endregion
 
         #region ## Life-Cycle ##

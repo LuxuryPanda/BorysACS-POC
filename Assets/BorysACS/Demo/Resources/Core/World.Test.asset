@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: World.Test
   m_EditorClassIdentifier: 
   priority: 0
+  _actors: []

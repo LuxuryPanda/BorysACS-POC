@@ -89,7 +89,10 @@ namespace BorysACS.Core
             InitializeContext();
             InitializeWorld();
         }
-
+        
+        /// <summary>
+        /// Initializes the context, happens only on the first initialization.
+        /// </summary>
         private void InitializeContext()
         {
             _context = ScriptableDirector.GetInherited<Context>();
@@ -100,6 +103,9 @@ namespace BorysACS.Core
             }
         }
         
+        /// <summary>
+        /// Initializes the world, happens only on the first initialization.
+        /// </summary>
         private void InitializeWorld()
         {
             _world = ScriptableDirector.GetInherited<World>();
@@ -109,7 +115,12 @@ namespace BorysACS.Core
         #endregion
         
         #region ## Core ##
-
+        
+        /// <summary>
+        /// Adds the system to the current context.
+        /// </summary>
+        /// <param name="system"></param>
+        /// <typeparam name="T"></typeparam>
         public static void AddSystem<T>(T system) where T : BaseSystem
         {
             _instance._context.AddSystem(system);
@@ -146,6 +157,38 @@ namespace BorysACS.Core
             }
         }
         
+        #endregion
+
+        #region ## Getters ##
+        
+        /// <summary>
+        /// Get the current context.
+        /// </summary>
+        /// <returns></returns>
+        public static Context GetContext()
+        {
+            return _instance._context;
+        }
+        
+        /// <summary>
+        /// Get the current world.
+        /// </summary>
+        /// <returns></returns>
+        public static World GetWorld()
+        {
+            return _instance._world;
+        }
+        
+        /// <summary>
+        /// Get the system of the given type from the current context.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetSystem<T>() where T : BaseSystem
+        {
+            return _instance._context.GetSystem<T>();
+        }
+
         #endregion
     }
 }
