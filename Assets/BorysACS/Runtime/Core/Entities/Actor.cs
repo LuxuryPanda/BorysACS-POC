@@ -20,16 +20,34 @@ namespace BorysACS.Core.Entities
     public class Actor : MonoBehaviour
     {
         #region ## Fields ##
+        
+        private GameObject _gameObject;
+        private Transform _transform;
 
         private Dictionary<string, Component> _componentsByName = new();
-        
         [SerializeField, HideInInspector] private List<Component> components = new();
 
         #endregion
 
         #region ## Properties ##
-
-
+        
+        public GameObject GameObject
+        {
+            get
+            {
+                if (_gameObject == null) InitializeCache();
+                return _gameObject;
+            }
+        }
+        
+        public Transform Transform
+        {
+            get
+            {
+                if (_transform == null) InitializeCache();
+                return _transform;
+            }
+        }
 
         #endregion
 
@@ -37,14 +55,26 @@ namespace BorysACS.Core.Entities
 
         private void Awake()
         {
-            InitializeActor();
+            Initialize();
         }
 
         #endregion
 
         #region ## Initialization ##
 
-        private void InitializeActor()
+        private void Initialize()
+        {
+            InitializeCache();
+            InitializeComponents();
+        }
+
+        private void InitializeCache()
+        {
+            _transform = transform;
+            _gameObject = gameObject;
+        }
+        
+        private void InitializeComponents()
         {
             _componentsByName.Clear();
             components.Clear();
@@ -57,6 +87,16 @@ namespace BorysACS.Core.Entities
                 _componentsByName.Add(component.GetType().Name, component);
                 components.Add(component);
             }
+        }
+
+        #endregion
+
+        #region ## Components Core ##
+
+        public void AddComponent<T>(T component) where T : Component
+        {
+            _componentsByName.Add(component.GetType().Name, component);
+            components.Add(component);
         }
 
         #endregion

@@ -18,7 +18,7 @@ using UnityEngine;
 namespace BorysACS.Core
 {
     /// <summary>
-    /// Core behaviour of the BorysACS framework. It is responsible for the 
+    /// Core behaviour of the BorysACS framework.
     /// </summary>
     public class Engine : MonoBehaviour
     {
@@ -27,12 +27,14 @@ namespace BorysACS.Core
         private static Engine _instance;
         private Context _context;
         private World _world;
+        
+        private bool _canExecute = false;
 
         #endregion
 
         #region ## Properties ##
 
-
+        
 
         #endregion
 
@@ -40,33 +42,45 @@ namespace BorysACS.Core
 
         private void Awake()
         {
-
+            Initialize();
         }
 
         private void Start()
         {
-
         }
         
         private void Update()
         {
-            
+            ExecuteSystems();
         }
         
         private void FixedUpdate()
         {
-            
+            ExecuteSystemsFixed();
         }
         
         private void LateUpdate()
         {
-            
+            ExecuteSystemsLate();
         }
 
         #endregion
 
         #region ## Initialization ##
-
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void OnBeforeSceneLoad()
+        {
+            if (_instance == null)
+            {
+                var gameObject = new GameObject("Engine");
+                _instance = gameObject.AddComponent<Engine>();
+                
+                // Not sure whether it should be persistent or not.
+                //DontDestroyOnLoad(gameObject);
+            }
+        }
+        
         private void Initialize()
         {
             _instance = this;
@@ -77,13 +91,17 @@ namespace BorysACS.Core
         private void InitializeContext()
         {
             _context = ScriptableDirector.Get<Context>();
-            _context.Initialize();
+            if (_context != null)
+            {
+                _context.Initialize();
+                _canExecute = true;
+            }
         }
         
         private void InitializeWorld()
         {
             _world = ScriptableDirector.Get<World>();
-            _world.Initialize();
+            if (_world != null) _world.Initialize();
         }
 
         #endregion
@@ -104,17 +122,26 @@ namespace BorysACS.Core
         /// </summary>
         private void ExecuteSystems()
         {
-            _context.ExecuteSystems();
+            if (_context != null)
+            {
+                _context.ExecuteSystems();
+            }
         }
         
         private void ExecuteSystemsFixed()
         {
-            _context.ExecuteSystemsFixed();
+            if (_context != null)
+            {
+                _context.ExecuteSystemsFixed();
+            }
         }
         
         private void ExecuteSystemsLate()
         {
-            _context.ExecuteSystemsLate();
+            if (_context != null)
+            {
+                _context.ExecuteSystemsLate();
+            }
         }
         
         #endregion

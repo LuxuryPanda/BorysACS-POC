@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace BorysACS.Tools
 {
-    [CreateAssetMenu(fileName = "Director.Scriptable", menuName = "BorysACS/Tools/ScriptableDirector")]
+    [CreateAssetMenu(fileName = "Director.Scriptable.asset", menuName = "BorysACS/Tools/ScriptableDirector")]
     public class ScriptableDirector : ScriptableObject
     {
         #region ## Fields ##
@@ -23,17 +23,17 @@ namespace BorysACS.Tools
         public bool autoLoadOnEnable = true;
 #endif
 
-        private List<ScriptableObject> _scriptableObjects = new();
+        [SerializeField] private List<ScriptableObject> _scriptableObjects = new();
         private Dictionary<string, ScriptableObject> _scriptableObjectsByName = new();
 
         [SerializeField] private List<string> searchPaths = new()
         {
-            "/Assets"
+            "Assets/"
         };
 
         [SerializeField] private List<string> excludedNamespaces = new()
         {
-            "BorysToolkit.Editor"
+            "BorysACS.Editor"
         };
 
 #if UNITY_EDITOR
@@ -96,9 +96,8 @@ namespace BorysACS.Tools
         #region ## Editor ##
 
 #if UNITY_EDITOR
-
         // In the inspector draw a button to force load the database
-        private void RefreshDatabase()
+        public void RefreshDatabase()
         {
             _scriptableObjects.Clear();
             _scriptableObjectsByName.Clear();

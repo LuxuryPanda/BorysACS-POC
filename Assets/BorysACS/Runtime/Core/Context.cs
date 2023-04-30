@@ -13,7 +13,11 @@ using UnityEngine;
 
 namespace BorysACS.Core
 {
-    public abstract class Context : ScriptableObject
+    /// <summary>
+    /// Context is a container responsible for storing and executing systems. It is intended to be interchangeable, which means
+    /// that multiple contexts can be created and switched between during the game. This is useful for creating different game modes, for example.
+    /// </summary>
+    public abstract class Context : BorysScriptableObject
     {
         #region ## Fields ##
 
@@ -31,8 +35,9 @@ namespace BorysACS.Core
 
         #region ## Initialization ##
 
-        internal void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
             _systems = new List<BaseSystem>();
             _systemsFixed = new List<BaseSystem>();
             _systemsLate = new List<BaseSystem>();

@@ -8,6 +8,7 @@
  ***/
 
 using System.Collections.Generic;
+using BorysACS.Core.Base;
 using BorysACS.Core.Entities;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace BorysACS.Core
     /// The World is the main operating system in the game.
     /// It is responsible for creating, updating and destroying all actors in the game.
     /// </summary>
-    public class World : ScriptableObject
+    public class World : BorysScriptableObject
     {
         #region ## Fields ##
 
@@ -48,14 +49,16 @@ namespace BorysACS.Core
 
         #region ## Initialization ##
 
-        internal void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
             InitializeActors();
         }
         
         private void InitializeActors()
         {
             _actors = new List<Actor>();
+            _actors.AddRange(FindObjectsOfType<Actor>());
         }
 
         #endregion
